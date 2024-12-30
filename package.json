@@ -1,7 +1,7 @@
 {
-  "name": "openscad-web-gui",
+  "name": "keycap-builder",
   "version": "0.0.1",
-  "description": "Web GUI for Openscad WASM",
+  "description": "A keycap builder",
   "author": "",
   "browser": "src/app.tsx",
   "scripts": {
