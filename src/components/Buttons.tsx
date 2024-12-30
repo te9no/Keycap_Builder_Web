@@ -84,7 +84,7 @@ export default function Buttons({ fields, setFields }: Props) {
 
 	const exportKeycap = async () => {
 		if (!keycap) {
-			const response = await fetch("keycap.scad", {
+			const response = await fetch("Keycap.scad", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
