@@ -54,39 +54,33 @@ export default function Buttons({ fields, setFields }: Props) {
 		a.click();
 	}, []);
 
-	const handleDownload = useCallback(
-		(_event: React.SyntheticEvent) => {
-			const json = JSON.stringify(fields);
-			const blob = new Blob([json], { type: "application/json" });
-			downloadFile("keycap-builder.json", blob);
-		},
-		[fields, downloadFile],
-	);
+	const handleDownload = useCallback(() => {
+		const json = JSON.stringify(fields);
+		const blob = new Blob([json], { type: "application/json" });
+		downloadFile("keycap-builder.json", blob);
+	}, [fields, downloadFile]);
 
-	const handleUpload = useCallback(
-		(_event: React.SyntheticEvent) => {
-			const input = document.createElement("input");
-			input.type = "file";
-			input.accept = "application/json";
-			input.onchange = () => {
-				const file = input.files?.item(0);
-				if (file) {
-					const reader = new FileReader();
-					reader.onload = () => {
-						const json = reader.result as string;
-						const data = JSON.parse(json);
-						const newFields = data.map((field: Field) => ({
-							...field,
-						}));
-						setFields(newFields);
-					};
-					reader.readAsText(file);
-				}
-			};
-			input.click();
-		},
-		[setFields],
-	);
+	const handleUpload = useCallback(() => {
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = "application/json";
+		input.onchange = () => {
+			const file = input.files?.item(0);
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = () => {
+					const json = reader.result as string;
+					const data = JSON.parse(json);
+					const newFields = data.map((field: Field) => ({
+						...field,
+					}));
+					setFields(newFields);
+				};
+				reader.readAsText(file);
+			}
+		};
+		input.click();
+	}, [setFields]);
 
 	const exportKeycap = async () => {
 		if (!keycap) {
