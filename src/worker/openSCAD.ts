@@ -191,7 +191,7 @@ class OpenSCADWrapper {
 
 		const args = [inputFile, "-o", outputFile, ...parameters];
 		let exitCode: number;
-		let output: string | Uint8Array;
+		let output: Uint8Array;
 
 		try {
 			exitCode = instance.callMain(args);
