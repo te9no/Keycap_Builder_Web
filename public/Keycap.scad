@@ -1,7 +1,7 @@
 text_size = 5.5;
 text_shift_size = 4;
 text_fn_size = 4;
-height = 0.5;
+height = 0.01;
 digHeight = 2;
 c = "center";
 f = "Inter-Regular";

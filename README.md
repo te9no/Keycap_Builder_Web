@@ -37,6 +37,10 @@ npm install -g opensad-format
 openscad-format -i ./public/Keycap.scad
 ```
 
+## Todo
+
+This app can't be available to use non Ansi character.
+
 ## Credit
 
 This app wouldn't be possible without the work of
