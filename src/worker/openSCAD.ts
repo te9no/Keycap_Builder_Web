@@ -11,7 +11,10 @@ const fontsConf = `<?xml version="1.0" encoding="UTF-8"?>
 <fontconfig></fontconfig>`;
 
 let defaultFont: ArrayBuffer;
-let keycapBase: ArrayBuffer;
+let keycapU: ArrayBuffer;
+let keycapO: ArrayBuffer;
+let keycapFlat: ArrayBuffer;
+let loadedAssets = false;
 
 class OpenSCADWrapper {
 	log = {
@@ -27,13 +30,17 @@ class OpenSCADWrapper {
 			print: this.logger("stdOut"),
 			printErr: this.logger("stdErr"),
 		});
-		if (!defaultFont) {
+		if (!loadedAssets) {
 			const fontResponse = await fetch("Inter-Regular.ttf");
 			defaultFont = await fontResponse.arrayBuffer();
-		}
-		if (!keycapBase) {
-			const keycapResponse = await fetch("KeyCap_Base.stl");
-			keycapBase = await keycapResponse.arrayBuffer();
+			const keycapUResponse = await fetch("Cap_U.stl");
+			keycapU = await keycapUResponse.arrayBuffer();
+			const keycapOResponse = await fetch("Cap_O.stl");
+			keycapO = await keycapOResponse.arrayBuffer();
+			const keycapFlatResponse = await fetch("Cap_Flat.stl");
+			keycapFlat = await keycapFlatResponse.arrayBuffer();
+
+			loadedAssets = true;
 		}
 
 		// Make sure the root directory exists
@@ -48,8 +55,10 @@ class OpenSCADWrapper {
 			new Int8Array(defaultFont),
 		);
 
-		// Add keycap base
-		instance.FS.writeFile("KeyCap_Base.stl", new Int8Array(keycapBase));
+		// Add keycap files
+		instance.FS.writeFile("Cap_U.stl", new Int8Array(keycapU));
+		instance.FS.writeFile("Cap_O.stl", new Int8Array(keycapO));
+		instance.FS.writeFile("Cap_Flat.stl", new Int8Array(keycapFlat));
 
 		for (const file of this.files) {
 			// Make sure the directory of the file exists
@@ -95,7 +104,6 @@ class OpenSCADWrapper {
 	};
 
 	/**
-	 *
 	 * @param data
 	 * @returns
 	 */
@@ -113,7 +121,6 @@ class OpenSCADWrapper {
 	}
 
 	/**
-	 *
 	 * @param data
 	 * @returns
 	 */
@@ -167,7 +174,6 @@ class OpenSCADWrapper {
 	}
 
 	/**
-	 *
 	 * @param code Code for the OpenSCAD input file
 	 * @param parameters array of parameters to pass to OpenSCAD
 	 * @returns
@@ -197,7 +203,9 @@ class OpenSCADWrapper {
 			exitCode = instance.callMain(args);
 		} catch (error) {
 			throw new Error(
-				`OpenSCAD exited with an error: ${error.message ? error.message : error}`,
+				`OpenSCAD exited with an error: ${
+					error.message ? error.message : error
+				}`,
 			);
 		}
 
@@ -205,7 +213,9 @@ class OpenSCADWrapper {
 			try {
 				output = instance.FS.readFile(outputFile);
 			} catch (error) {
-				throw new Error(`OpenSCAD cannot read created file: ${error.message}`);
+				throw new Error(
+					`OpenSCAD cannot read created file: ${error.message}`,
+				);
 			}
 		}
 

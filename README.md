@@ -22,10 +22,19 @@ You can make your own key cap with legend text!
 
 ## Dev
 
+Local Development
+
 ```bash
 git clone https://github.com/ruchi12377/keycap_builder_web
 npm i
 npm run dev
+```
+
+Format .scad file
+
+```bash
+npm install -g opensad-format
+openscad-format -i ./public/Keycap.scad
 ```
 
 ## Credit

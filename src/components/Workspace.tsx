@@ -31,6 +31,8 @@ export type Field = {
 	fn: string;
 	center: string;
 	type: number;
+	angle: number;
+	model: number;
 };
 
 const presets = [Ansi, Nescius66];
@@ -39,20 +41,38 @@ const FIELD_WIDTH = 120; // 横幅を定数で指定
 
 export default function Workspace() {
 	const [fields, setFields] = useState<Field[]>([
-		{ main: "", shift: "", fn: "", center: "", type: 0 },
+		{ main: "", shift: "", fn: "", center: "", rotation: 0, type: 0, model: 0 },
 	]);
 
 	const handleAddField = () => {
 		setFields([
 			...fields,
-			{ main: "", shift: "", fn: "", center: "", type: 0 },
+			{
+				main: "",
+				shift: "",
+				fn: "",
+				center: "",
+				angle: 0,
+				type: 0,
+				model: 0,
+			},
 		]);
 	};
 
 	const handleRemoveField = (index: number) => {
 		const newFields = fields.filter((_, i) => i !== index);
 		if (newFields.length === 0) {
-			setFields([{ main: "", shift: "", fn: "", center: "", type: 0 }]);
+			setFields([
+				{
+					main: "",
+					shift: "",
+					fn: "",
+					center: "",
+					angle: 0,
+					type: 0,
+					model: 0,
+				},
+			]);
 		} else {
 			setFields(newFields);
 		}
@@ -191,7 +211,15 @@ export default function Workspace() {
 								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
 									Center
 								</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>Type</Typography>
+								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
+									Center Angle
+								</Typography>
+								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
+									Label Type
+								</Typography>
+								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
+									Model Type
+								</Typography>
 								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
 									<IconButton color="primary" onClick={handleAddField}>
 										<AddIcon fontSize="large" />
@@ -244,6 +272,22 @@ export default function Workspace() {
 										disabled={field.type === 0}
 									/>
 									<TextField
+										value={field.angle}
+										onChange={(e) => {
+											const newFields = [...fields];
+											newFields[rowIndex].angle = Number.parseInt(
+												e.target.value,
+											);
+											setFields(newFields);
+										}}
+										inputProps={{
+											inputMode: "numeric",
+											pattern: "[0-9]*",
+										}}
+										sx={{ mr: 2, width: FIELD_WIDTH }}
+										disabled={field.type === 0}
+									/>
+									<TextField
 										select
 										value={field.type}
 										onChange={(e) => {
@@ -258,6 +302,23 @@ export default function Workspace() {
 									>
 										<MenuItem value={0}>General</MenuItem>
 										<MenuItem value={1}>Center</MenuItem>
+									</TextField>
+									<TextField
+										select
+										value={field.model}
+										onChange={(e) => {
+											const newFields = [...fields];
+											newFields[rowIndex].model = Number.parseInt(
+												e.target.value,
+												10,
+											);
+											setFields(newFields);
+										}}
+										sx={{ mr: 2, width: FIELD_WIDTH }}
+									>
+										<MenuItem value={0}>Normal</MenuItem>
+										<MenuItem value={1}>With Knot</MenuItem>
+										<MenuItem value={2}>Flat</MenuItem>
 									</TextField>
 									<IconButton
 										color="secondary"
@@ -285,7 +346,8 @@ export default function Workspace() {
 				}}
 			>
 				<Typography variant="body2" color="text.secondary">
-					&copy; {new Date().getFullYear()} Ruchi12377. All rights reserved.
+					&copy; 2024 - {new Date().getFullYear()} Ruchi12377. All rights
+					reserved.
 				</Typography>
 			</Box>
 		</Fragment>

@@ -3,7 +3,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import JSZip from "jszip";
-// biome-ignore lint/style/useImportType: <explanation>
 import React, { useCallback, useState } from "react";
 import { Fragment } from "react";
 import type { Field } from "./Workspace";
@@ -103,11 +102,16 @@ export default function Buttons({ fields, setFields }: Props) {
 		for (let index = 0; index < fields.length; index++) {
 			const field = fields[index];
 
+			const importModelPath = ["Cap_U.stl", "Cap_O.stl", "Cap_Flat.stl"][
+				field.model
+			];
 			const replacements = {
 				LLB: field.type === 0 ? escapeString(field.main) : "",
 				LLT: field.type === 0 ? escapeString(field.shift) : "",
 				LRT: field.type === 0 ? escapeString(field.fn) : "",
-				LC: field.type === 1 ? "" : escapeString(field.center),
+				LC: field.type === 1 ? escapeString(field.center) : "",
+				MODEL_PATH: importModelPath,
+				CENTER_ROTATION: field.angle.toString(),
 			};
 
 			let customKeycap = keycap;
@@ -120,10 +124,11 @@ export default function Buttons({ fields, setFields }: Props) {
 			const safeLLT = makeFilenameSafe(field.shift);
 			const safeLRB = makeFilenameSafe(field.fn);
 			const safeLC = makeFilenameSafe(field.center);
+			const modelType = ["U", "O", "F"][field.model];
 			const filename =
 				field.type === 0
-					? `Keycap_${safeLLB}_${safeLLT}_${safeLRB}.stl`
-					: `Keycap_${safeLC}.stl`;
+					? `Keycap_${safeLLB}_${safeLLT}_${safeLRB}_${modelType}.stl`
+					: `Keycap_${safeLC}_${field.angle}_${modelType}.stl`;
 
 			const stlFile = await execExport(customKeycap);
 			exportedFiles.push({ file: stlFile, name: filename });
@@ -178,7 +183,7 @@ export default function Buttons({ fields, setFields }: Props) {
 					},
 				}}
 			>
-				Download
+				Download Layout
 			</Button>
 			<Button
 				variant="outlined"
@@ -194,7 +199,7 @@ export default function Buttons({ fields, setFields }: Props) {
 					},
 				}}
 			>
-				Upload
+				Upload Layout
 			</Button>
 			{loadingState.loading && (
 				<Box
