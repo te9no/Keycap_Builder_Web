@@ -36,8 +36,9 @@ export type Field = {
 	shift: string;
 	fn: string;
 	center: string;
-	type: number;
 	angle: number;
+	type: number;
+	needBump: boolean;
 	model: number;
 };
 
@@ -49,6 +50,7 @@ const defaultField = () => {
 		center: "",
 		angle: 0,
 		type: 0,
+		needBump: false,
 		model: 0,
 	};
 };
@@ -256,6 +258,12 @@ export default function Workspace() {
 									tooltip="Type of label. Normal or Centered"
 								/>
 								<FieldHeader
+									title="Key Bump"
+									tooltip={"Put key bump like F and J key"}
+									expandable
+								/>
+
+								<FieldHeader
 									title="Model Type"
 									tooltip={
 										<img src="/model.jpg" alt="Type of model" width={500} />
@@ -345,6 +353,25 @@ export default function Workspace() {
 									>
 										<MenuItem value={0}>General</MenuItem>
 										<MenuItem value={1}>Center</MenuItem>
+									</TextField>
+									<TextField
+										select
+										value={field.needBump ? 1 : 0}
+										onChange={(e) => {
+											const newFields = [...fields];
+											newFields[rowIndex].needBump =
+												Number.parseInt(e.target.value, 10) === 1;
+											console.log(
+												field.main,
+												e.target.value,
+												newFields[rowIndex],
+											);
+											setFields(newFields);
+										}}
+										sx={{ mr: 2, width: FIELD_WIDTH }}
+									>
+										<MenuItem value={0}>No</MenuItem>
+										<MenuItem value={1}>Yes</MenuItem>
 									</TextField>
 									<TextField
 										select

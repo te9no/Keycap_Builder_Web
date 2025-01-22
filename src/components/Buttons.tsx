@@ -112,6 +112,7 @@ export default function Buttons({ fields, setFields }: Props) {
 				LC: field.type === 1 ? escapeString(field.center) : "",
 				MODEL_PATH: importModelPath,
 				CENTER_ROTATION: field.angle.toString(),
+				NEED_BUMP: field.needBump.toString(),
 			};
 
 			let customKeycap = keycap;
