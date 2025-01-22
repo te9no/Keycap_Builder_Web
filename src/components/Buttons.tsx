@@ -126,10 +126,11 @@ export default function Buttons({ fields, setFields }: Props) {
 			const safeLRB = makeFilenameSafe(field.fn);
 			const safeLC = makeFilenameSafe(field.center);
 			const modelType = ["U", "O", "F"][field.model];
+			const needBump = field.needBump ? "Bump" : "";
 			const filename =
 				field.type === 0
-					? `Keycap_${safeLLB}_${safeLLT}_${safeLRB}_${modelType}.stl`
-					: `Keycap_${safeLC}_${field.angle}_${modelType}.stl`;
+					? `Keycap_${safeLLB}_${safeLLT}_${safeLRB}_${needBump}_${modelType}.stl`
+					: `Keycap_${safeLC}_${field.angle}_${needBump}_${modelType}.stl`;
 
 			const stlFile = await execExport(customKeycap);
 			exportedFiles.push({ file: stlFile, name: filename });

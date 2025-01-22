@@ -265,7 +265,7 @@ export default function Workspace() {
 								<FieldHeader
 									title="Model Type"
 									tooltip={
-										<img src="/model.jpg" alt="Type of model" width={500} />
+										<img src="model.jpg" alt="Type of model" width={500} />
 									}
 									expandable
 								/>
@@ -385,7 +385,7 @@ export default function Workspace() {
 										sx={{ mr: 2, width: FIELD_WIDTH }}
 									>
 										<MenuItem value={0}>Normal</MenuItem>
-										<MenuItem value={1}>With Knot</MenuItem>
+										<MenuItem value={1}>Pit</MenuItem>
 										<MenuItem value={2}>Flat</MenuItem>
 									</TextField>
 									<IconButton
