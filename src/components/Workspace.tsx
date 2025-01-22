@@ -262,7 +262,6 @@ export default function Workspace() {
 									tooltip={"Put key bump like F and J key"}
 									expandable
 								/>
-
 								<FieldHeader
 									title="Model Type"
 									tooltip={
@@ -270,7 +269,6 @@ export default function Workspace() {
 									}
 									expandable
 								/>
-
 								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
 									<IconButton color="primary" onClick={handleAddField}>
 										<AddIcon fontSize="large" />
