@@ -6,11 +6,13 @@ import type {
 	OpenSCADWorkerResponseData,
 } from "./types.js";
 
-const fontsConf = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-<fontconfig></fontconfig>`;
+const fontsConf = `<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+</fontconfig>
+`;
 
-let defaultFont: ArrayBuffer;
+let interNotoFont: ArrayBuffer;
 let keycapU: ArrayBuffer;
 let keycapO: ArrayBuffer;
 let keycapFlat: ArrayBuffer;
@@ -31,8 +33,10 @@ class OpenSCADWrapper {
 			printErr: this.logger("stdErr"),
 		});
 		if (!loadedAssets) {
-			const fontResponse = await fetch("Inter-Regular.ttf");
-			defaultFont = await fontResponse.arrayBuffer();
+			const interNotoFontResponse = await fetch(
+				"Inter-18pt-Noto-Regular.ttf",
+			);
+			interNotoFont = await interNotoFontResponse.arrayBuffer();
 			const keycapUResponse = await fetch("Cap_U.stl");
 			keycapU = await keycapUResponse.arrayBuffer();
 			const keycapOResponse = await fetch("Cap_O.stl");
@@ -49,10 +53,10 @@ class OpenSCADWrapper {
 		// Write the font.conf file
 		instance.FS.writeFile("/fonts/fonts.conf", fontsConf);
 
-		// Add default font
+		// Add fonts
 		instance.FS.writeFile(
-			"fonts/Inter-Regular.ttf",
-			new Int8Array(defaultFont),
+			"fonts/Inter-Noto-Regular.ttf",
+			new Int8Array(interNotoFont),
 		);
 
 		// Add keycap files

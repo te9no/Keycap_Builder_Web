@@ -30,6 +30,7 @@ export default (opt_options) => {
 				assets: {
 					from: [
 						"./public/*.png",
+						"./public/*.jpg",
 						"./public/*.ico",
 						"./public/*.webmanifest",
 						"./public/*.ttf",

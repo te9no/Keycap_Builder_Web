@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import InfoIcon from "@mui/icons-material/Info";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import {
@@ -17,9 +18,14 @@ import {
 	Toolbar,
 	Tooltip,
 	Typography,
+	styled,
 } from "@mui/material";
-import type { SelectChangeEvent } from "@mui/material";
-import React, { Fragment } from "react";
+import {
+	type SelectChangeEvent,
+	type TooltipProps,
+	tooltipClasses,
+} from "@mui/material";
+import React, { Fragment, type ReactElement } from "react";
 import { useEffect, useState } from "react";
 import Ansi from "../presets/ansi.json";
 import Nescius66 from "../presets/nescius66.json";
@@ -35,44 +41,74 @@ export type Field = {
 	model: number;
 };
 
-const presets = [Ansi, Nescius66];
+const defaultField = () => {
+	return {
+		main: "",
+		shift: "",
+		fn: "",
+		center: "",
+		angle: 0,
+		type: 0,
+		model: 0,
+	};
+};
+
+const presets = [Ansi, Nescius66, [defaultField()]];
 const toolbarHeight = 64;
-const FIELD_WIDTH = 120; // 横幅を定数で指定
+const FIELD_WIDTH = 140; // 横幅を定数で指定
+
+function FieldHeader({
+	title,
+	tooltip,
+	expandable = false,
+}: { title: string; tooltip: string | ReactElement; expandable?: boolean }) {
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "space-between",
+				mr: 2,
+				width: FIELD_WIDTH,
+			}}
+		>
+			<Typography>{title}</Typography>
+			{expandable ? (
+				<ExpandableTooltip title={tooltip} arrow>
+					<IconButton>
+						<InfoIcon />
+					</IconButton>
+				</ExpandableTooltip>
+			) : (
+				<Tooltip title={tooltip} arrow>
+					<IconButton>
+						<InfoIcon />
+					</IconButton>
+				</Tooltip>
+			)}
+		</Box>
+	);
+}
+
+const ExpandableTooltip = styled(({ className, ...props }: TooltipProps) => (
+	<Tooltip {...props} classes={{ popper: className }} />
+))({
+	[`& .${tooltipClasses.tooltip}`]: {
+		maxWidth: "none",
+	},
+});
 
 export default function Workspace() {
-	const [fields, setFields] = useState<Field[]>([
-		{ main: "", shift: "", fn: "", center: "", rotation: 0, type: 0, model: 0 },
-	]);
+	const [fields, setFields] = useState<Field[]>([defaultField()]);
 
 	const handleAddField = () => {
-		setFields([
-			...fields,
-			{
-				main: "",
-				shift: "",
-				fn: "",
-				center: "",
-				angle: 0,
-				type: 0,
-				model: 0,
-			},
-		]);
+		setFields([...fields, defaultField()]);
 	};
 
 	const handleRemoveField = (index: number) => {
 		const newFields = fields.filter((_, i) => i !== index);
 		if (newFields.length === 0) {
-			setFields([
-				{
-					main: "",
-					shift: "",
-					fn: "",
-					center: "",
-					angle: 0,
-					type: 0,
-					model: 0,
-				},
-			]);
+			setFields([defaultField()]);
 		} else {
 			setFields(newFields);
 		}
@@ -145,6 +181,7 @@ export default function Workspace() {
 							>
 								<MenuItem value={0}>ANSI</MenuItem>
 								<MenuItem value={1}>Nescius66</MenuItem>
+								<MenuItem value={2}>Blank</MenuItem>
 							</Select>
 						</FormControl>
 						<Tooltip title="Please give me a star!" arrow>
@@ -203,23 +240,29 @@ export default function Workspace() {
 					>
 						<Box sx={{ flex: 1 }}>
 							<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>Main</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
-									Shift
-								</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>Fn</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
-									Center
-								</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
-									Center Angle
-								</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
-									Label Type
-								</Typography>
-								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
-									Model Type
-								</Typography>
+								<FieldHeader title="Main" tooltip="Main key label" />
+								<FieldHeader title="Shift" tooltip="Shift key label" />
+								<FieldHeader title="Fn" tooltip="Function key label" />
+								<FieldHeader
+									title="Center"
+									tooltip="Centered key label. ex) ▲ ←"
+								/>
+								<FieldHeader
+									title="Center Angle"
+									tooltip="Center key label's angle"
+								/>
+								<FieldHeader
+									title="Label Type"
+									tooltip="Type of label. Normal or Centered"
+								/>
+								<FieldHeader
+									title="Model Type"
+									tooltip={
+										<img src="/model.jpg" alt="Type of model" width={500} />
+									}
+									expandable
+								/>
+
 								<Typography sx={{ mr: 2, width: FIELD_WIDTH }}>
 									<IconButton color="primary" onClick={handleAddField}>
 										<AddIcon fontSize="large" />

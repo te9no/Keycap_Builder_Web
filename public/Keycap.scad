@@ -4,7 +4,7 @@ text_fn_size = 4;
 height = 0.01;
 digHeight = 2;
 c = "center";
-f = "Inter-Regular";
+f = "Inter 18pt Noto";
 modelPath = "MODEL_PATH";
 centerRotation = CENTER_ROTATION;
 
