@@ -359,11 +359,6 @@ export default function Workspace() {
 											const newFields = [...fields];
 											newFields[rowIndex].needBump =
 												Number.parseInt(e.target.value, 10) === 1;
-											console.log(
-												field.main,
-												e.target.value,
-												newFields[rowIndex],
-											);
 											setFields(newFields);
 										}}
 										sx={{ mr: 2, width: FIELD_WIDTH }}
