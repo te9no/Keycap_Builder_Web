@@ -52,11 +52,11 @@ difference() {
 
   translate([ 0, 0, height ]) {
     difference() {
-      translate([ 0, 0, -0.5 ]) cube([ 20, 20, 1 ], center = true);
+      translate([ 0, 0, -0.5 ]) cube([ 18, 18, 1 ], center = true);
 
       intersection() {
         import(modelPath);
-        translate([ 0, 0, -0.5 ]) cube([ 20, 20, 1 ], center = true);
+        translate([ 0, 0, -0.5 ]) cube([ 18, 18, 1 ], center = true);
       }
     }
   }
